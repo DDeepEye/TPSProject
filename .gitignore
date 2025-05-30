@@ -1,0 +1,7 @@
+Binaries/
+Saved/
+Intermediate/
+logs/
+build/
+.vs/
+*.sln
