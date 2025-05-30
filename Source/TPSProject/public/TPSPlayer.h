@@ -44,4 +44,19 @@ public:
 
 	void Turn(const struct FInputActionValue& inputValue);
 	void LookUp(const struct FInputActionValue& inputValue);
+
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ia_Move;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ia_Jump;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSetting)
+	float walkSpeed = 600;
+
+	FVector direction;
+
+	void Move(const struct FInputActionValue& inputValue);
+	void InputJump(const struct FInputActionValue& inputValue);
 };
