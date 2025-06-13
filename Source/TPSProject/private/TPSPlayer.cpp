@@ -10,6 +10,7 @@
 #include "Bullet.h"
 #include <Blueprint/UserWidget.h>
 #include <Kismet/GameplayStatics.h>
+#include "Enemy.h"
 
 
 // Sets default values
@@ -18,7 +19,7 @@ ATPSPlayer::ATPSPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/AnimStarterPack/UE4_Mannequin/Mesh/SK_Mannequin.SK_Mannequin'"));
 	if (TempMesh.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(TempMesh.Object);
@@ -175,7 +176,11 @@ void ATPSPlayer::InputFire(const struct FInputActionValue& inputValue)
 			{
 				FVector dir = (endPos - startPos).GetSafeNormal();
 				FVector force = dir * hitComp->GetMass() * 5000;
-				hitComp->AddForceAtLocation(force, hitInfo.ImpactPoint);
+				hitComp->AddForceAtLocation(force, hitInfo.ImpactPoint);				
+			}
+			if (hitInfo.GetActor()->IsA(AEnemy::StaticClass()))
+			{
+				Cast<AEnemy>(hitInfo.GetActor())->OnDamageProcess();
 			}
 		}
 	}

@@ -26,4 +26,25 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void OnDamageProcess();	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "CharacterState")
+	int32 hp = 3;
+
+	UPROPERTY(EditAnywhere, Category = "CharacterState")
+	float damageDelayTime = 2.0f;
+	float currentTime = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "CharacterState")
+	bool isDamageState = false;
+
+	UPROPERTY(EditAnywhere, Category = "CharacterState")
+	float dieSpeed = 50.0f;
+
+protected:
+	void DamageStage();
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "CharacterState")
+	virtual void Die();
 };
