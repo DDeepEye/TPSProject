@@ -55,13 +55,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_Jump;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ia_Run;
+
 	UPROPERTY(EditAnywhere, Category = PlayerSetting)
-	float walkSpeed = 600;
+	float walkSpeed = 200;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSetting)
+	float runSpeed = 600;
 
 	FVector direction;
 
 	void Move(const struct FInputActionValue& inputValue);
 	void InputJump(const struct FInputActionValue& inputValue);
+	void InputRun();	
 
 
 	UPROPERTY(VisibleAnywhere, Category = GunMesh)
@@ -108,5 +115,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = BulletEffect)
 	class UParticleSystem* bulletEffectFactory;
 
-	
+	UPROPERTY(EditDefaultsOnly, Category = CameraMotion)
+	TSubclassOf<class UCameraShakeBase> cameraShake;
 };
