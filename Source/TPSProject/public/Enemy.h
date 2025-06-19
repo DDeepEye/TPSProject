@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Enemy.generated.h"
 
+
+
 UCLASS()
 class TPSPROJECT_API AEnemy : public ACharacter
 {
@@ -40,6 +42,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "CharacterState")
 	float dieSpeed = 50.0f;
+	class UEnemyAnim* anim;
 
 protected:
 	void DamageStage();

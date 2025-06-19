@@ -2,6 +2,7 @@
 
 
 #include "Enemy.h"
+#include "EnemyAnim.h"
 #include <Components/CapsuleComponent.h>
 
 // Sets default values
@@ -28,7 +29,8 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	anim = Cast<UEnemyAnim>(GetMesh()->GetAnimInstance());
+	anim->animState = EEnemyState::Idle;
 }
 
 // Called every frame
@@ -41,7 +43,7 @@ void AEnemy::Tick(float DeltaTime)
 	}	
 	if (hp <= 0)
 	{
-		Die();
+		Die();		
 	}
 }
 
@@ -62,7 +64,8 @@ void AEnemy::OnDamageProcess()
 	}
 	else
 	{
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);		
+		anim->animState = EEnemyState::Die;
 	}
 }
 
@@ -72,7 +75,7 @@ void AEnemy::DamageStage()
 	if (currentTime > damageDelayTime)
 	{
 		isDamageState = false;		
-	}
+	}	
 }
 
 void AEnemy::Die()
