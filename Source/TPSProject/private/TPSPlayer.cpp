@@ -71,6 +71,12 @@ ATPSPlayer::ATPSPlayer()
 	{
 		crosshairUIFactory = TempCrosshairWidget.Class;
 	}
+	
+	ConstructorHelpers::FObjectFinder<USoundBase> TempSound(TEXT("/Script/Engine.SoundWave'/Game/SniperGun/Rifle.Rifle'"));
+	if (TempSound.Succeeded())
+	{
+		bulletSound = TempSound.Object;
+	}
 
 	bUseControllerRotationYaw = true;
 }
@@ -178,6 +184,8 @@ void ATPSPlayer::InputFire(const struct FInputActionValue& inputValue)
 
 	UPlayerAnim* anim = Cast<UPlayerAnim>(GetMesh()->GetAnimInstance());
 	anim->PlayerAttackAnim();
+
+	UGameplayStatics::PlaySound2D(GetWorld(), bulletSound);
 
 	if (bUsingGrenadeGun)
 	{
