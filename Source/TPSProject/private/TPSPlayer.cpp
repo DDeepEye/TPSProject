@@ -11,6 +11,7 @@
 #include <Blueprint/UserWidget.h>
 #include <Kismet/GameplayStatics.h>
 #include "EnemyFSM.h"
+#include <GameFramework//CharacterMovementComponent.h>
 
 
 // Sets default values
@@ -74,6 +75,7 @@ ATPSPlayer::ATPSPlayer()
 void ATPSPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 	APlayerController* pc = Cast<APlayerController>(Controller);
 	if (pc)
 	{

@@ -56,7 +56,10 @@ public:
 	class UInputAction* ia_Jump;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSetting)
-	float walkSpeed = 600;
+	float walkSpeed = 200;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSetting)
+	float runSpeed = 600;
 
 	FVector direction;
 
