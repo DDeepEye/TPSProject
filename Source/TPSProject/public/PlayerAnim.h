@@ -25,4 +25,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
 	bool isInAir = false;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerAnim)
+	class UAnimMontage* attackAnimMontage;
+	void PlayAttackAnim();
 };

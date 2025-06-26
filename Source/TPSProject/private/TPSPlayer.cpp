@@ -12,6 +12,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "EnemyFSM.h"
 #include <GameFramework//CharacterMovementComponent.h>
+#include "PlayerAnim.h"
 
 
 // Sets default values
@@ -157,6 +158,8 @@ void ATPSPlayer::InputJump(const struct FInputActionValue& inputValue)
 
 void ATPSPlayer::InputFire(const struct FInputActionValue& inputValue)
 {
+	UPlayerAnim* anim = Cast<UPlayerAnim>(GetMesh()->GetAnimInstance());
+	anim->PlayAttackAnim();
 	if (bUsingGrenadeGun)
 	{
 		FTransform firePosition = gunMeshComp->GetSocketTransform((TEXT("FirePosition")));

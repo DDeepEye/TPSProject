@@ -106,4 +106,5 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = BulletEffect)
 	class UParticleSystem* bulletEffectFactory;
+	
 };
