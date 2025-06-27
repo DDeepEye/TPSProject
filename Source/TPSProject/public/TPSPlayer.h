@@ -106,5 +106,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = BulletEffect)
 	class UParticleSystem* bulletEffectFactory;
-	
+
+	UPROPERTY(EditDefaultsOnly, Category = CameraMotion)
+	TSubclassOf<class UCameraShakeBase> cameraShake;
+
+	UPROPERTY(EditDefaultsOnly, Category = CameraMotion)
+	class USoundBase* bulletSound;
+
 };

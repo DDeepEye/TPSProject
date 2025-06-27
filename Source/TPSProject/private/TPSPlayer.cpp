@@ -39,21 +39,23 @@ ATPSPlayer::ATPSPlayer()
 	tpsCamComp->bUsePawnControlRotation = false;
 
 	gunMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMeshComp"));
-	gunMeshComp->SetupAttachment(GetMesh());
+	gunMeshComp->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempGunMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/FPWeapon/Mesh/SK_FPGun.SK_FPGun'"));
 	if (TempGunMesh.Succeeded())
 	{
 		gunMeshComp->SetSkeletalMesh(TempGunMesh.Object);
-		gunMeshComp->SetRelativeLocation(FVector(-14, 52, 120));
+		gunMeshComp->SetRelativeLocation(FVector(-17, 10, -3));
+		gunMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
 
 	sniperGunComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SniperGunComp"));
-	sniperGunComp->SetupAttachment(GetMesh());
+	sniperGunComp->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> TempSniperMesh(TEXT("/Script/Engine.StaticMesh'/Game/SniperGun/sniper1.sniper1'"));
 	if (TempSniperMesh.Succeeded())
 	{
 		sniperGunComp->SetStaticMesh(TempSniperMesh.Object);
-		sniperGunComp->SetRelativeLocation(FVector(-22, 55, 120));
+		sniperGunComp->SetRelativeLocation(FVector(-42, 7, 1));
+		sniperGunComp->SetRelativeRotation(FRotator(0, 90, 0));
 		sniperGunComp->SetRelativeScale3D(FVector(0.15f));
 	}
 
@@ -70,6 +72,12 @@ ATPSPlayer::ATPSPlayer()
 	}
 
 	bUseControllerRotationYaw = true;
+
+	ConstructorHelpers::FObjectFinder<USoundBase> tempSound(TEXT("/Script/Engine.SoundWave'/Game/SniperGun/Rifle.Rifle''"));
+	if (tempSound.Succeeded())
+	{
+		bulletSound = tempSound.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -158,6 +166,9 @@ void ATPSPlayer::InputJump(const struct FInputActionValue& inputValue)
 
 void ATPSPlayer::InputFire(const struct FInputActionValue& inputValue)
 {
+	UGameplayStatics::PlaySound2D(GetWorld(), bulletSound);
+	APlayerController* controller = GetWorld()->GetFirstPlayerController();
+	controller->PlayerCameraManager->StartCameraShake(cameraShake);
 	UPlayerAnim* anim = Cast<UPlayerAnim>(GetMesh()->GetAnimInstance());
 	anim->PlayAttackAnim();
 	if (bUsingGrenadeGun)
