@@ -25,7 +25,7 @@ ATPSPlayer::ATPSPlayer()
 	if (TempMesh.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(TempMesh.Object);
-		GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0,-90,0));
+		GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88), FRotator(0,-90,0));		
 	}
 
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
@@ -143,7 +143,7 @@ void ATPSPlayer::PlayerMove()
 void ATPSPlayer::Turn(const struct FInputActionValue& inputValue)
 {
 	float value = inputValue.Get<float>();
-	AddControllerYawInput(value);
+	AddControllerYawInput(value);	
 }
 
 void ATPSPlayer::LookUp(const struct FInputActionValue& inputValue)

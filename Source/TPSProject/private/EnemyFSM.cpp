@@ -7,6 +7,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "TPSProject.h"
 #include <Components/CapsuleComponent.h>
+#include "EnemyAnim.h"
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -28,6 +29,8 @@ void UEnemyFSM::BeginPlay()
 	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ATPSPlayer::StaticClass());
 	target = Cast<ATPSPlayer>(actor);
 	me = Cast<AEnemy>(GetOwner());
+
+	anim = Cast<UEnemyAnim>(me->GetMesh()->GetAnimInstance());
 }
 
 
@@ -68,6 +71,7 @@ void UEnemyFSM::IdleState()
 	{
 		mState = EEnemyState::Move;
 		currentTime = 0;
+		anim->animState = mState;
 	}
 }
 
@@ -81,6 +85,9 @@ void UEnemyFSM::MoveState()
 	if (dir.Size() < attackRange)
 	{
 		mState = EEnemyState::Attack;
+		anim->animState = mState;
+		anim->bAttackPlay = true;
+		currentTime = attackDelayTime;
 	}
 }
 
@@ -92,12 +99,14 @@ void UEnemyFSM::AttackState()
 	{
 		PRINT_LOG(TEXT("Attack!!!!"));
 		currentTime = 0;
+		anim->bAttackPlay = true;
 	}
 
 	float distance = FVector::Distance(target->GetActorLocation(), me->GetActorLocation());
 	if (distance > attackRange)
 	{
 		mState = EEnemyState::Move;
+		anim->animState = mState;
 	}
 }
 
@@ -108,6 +117,7 @@ void UEnemyFSM::DamageState()
 	{
 		mState = EEnemyState::Idle;
 		currentTime = 0;
+		anim->animState = mState;
 	}
 }
 
@@ -131,11 +141,17 @@ void UEnemyFSM::OnDamageProcess()
 	if (hp > 0)
 	{
 		mState = EEnemyState::Damage;
+
+		currentTime = 0;
+		int32 index = FMath::RandRange(0, 1);
+		FString sectionName = FString::Printf(TEXT("Damage%d"), index);
+		anim->PlayDamageAnim(FName(*sectionName));
 	}
 	else
 	{
 		mState = EEnemyState::Die;
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
+	anim->animState = mState;
 }
 
