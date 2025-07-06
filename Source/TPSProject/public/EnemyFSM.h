@@ -74,4 +74,7 @@ public:
 
 	UPROPERTY()
 	class UEnemyAnim* anim;
+
+	UPROPERTY()
+	class AAIController* ai;
 };
