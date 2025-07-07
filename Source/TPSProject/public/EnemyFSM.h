@@ -77,4 +77,7 @@ public:
 
 	UPROPERTY()
 	class AAIController* ai;
+
+	FVector randomPos;
+	bool GetRandompositionInNavMesh(FVector centerLocation, float radius, FVector& dest);
 };

@@ -9,6 +9,8 @@
 #include <Components/CapsuleComponent.h>
 #include "EnemyAnim.h"
 #include <AIController.h>
+#include <NavigationSystem.h>
+#include "Navigation/PathFollowingComponent.h"
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -75,6 +77,8 @@ void UEnemyFSM::IdleState()
 		mState = EEnemyState::Move;
 		currentTime = 0;
 		anim->animState = mState;
+
+		GetRandompositionInNavMesh(me->GetActorLocation(), 500, randomPos);
 	}
 }
 
@@ -82,10 +86,32 @@ void UEnemyFSM::MoveState()
 {
 	FVector destination = target->GetActorLocation();
 	FVector dir = destination - me->GetActorLocation();
-	ai->MoveToLocation(destination);
+	
+	UNavigationSystemV1* ns = UNavigationSystemV1::GetNavigationSystem(GetWorld());
+
+	FPathFindingQuery query;
+	FAIMoveRequest req;
+	req.SetAcceptanceRadius(3);
+	req.SetGoalLocation(destination);
+	ai->BuildPathfindingQuery(req, query);
+	FPathFindingResult r = ns->FindPathSync(query);
+
+	if (r.Result == ENavigationQueryResult::Success)
+	{
+		ai->MoveToLocation(destination);
+	}
+	else
+	{
+		EPathFollowingRequestResult::Type result = ai->MoveToLocation(randomPos);
+		if (result == EPathFollowingRequestResult::AlreadyAtGoal)
+		{
+			GetRandompositionInNavMesh(me->GetActorLocation(), 500, randomPos);
+		}
+	}
 	
 	if (dir.Size() < attackRange)
 	{
+		ai->StopMovement();
 		mState = EEnemyState::Attack;
 		anim->animState = mState;
 		anim->bAttackPlay = true;
@@ -109,6 +135,8 @@ void UEnemyFSM::AttackState()
 	{
 		mState = EEnemyState::Move;
 		anim->animState = mState;
+
+		GetRandompositionInNavMesh(me->GetActorLocation(), 500, randomPos);
 	}
 }
 
@@ -159,7 +187,19 @@ void UEnemyFSM::OnDamageProcess()
 		mState = EEnemyState::Die;
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		anim->PlayDamageAnim(TEXT("Die"));
-	}
+	}	
 	anim->animState = mState;
+	ai->StopMovement();
+}
+
+bool UEnemyFSM::GetRandompositionInNavMesh(FVector centerLocation, float radius, FVector& dest)
+{
+	UNavigationSystemV1* ns = UNavigationSystemV1::GetNavigationSystem(GetWorld());
+	FNavLocation loc;
+
+	bool result = ns->GetRandomReachablePointInRadius(centerLocation, radius, loc);
+	dest = loc.Location;
+
+	return result;
 }
 
