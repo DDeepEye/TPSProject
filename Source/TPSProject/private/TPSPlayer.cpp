@@ -13,6 +13,7 @@
 #include "EnemyFSM.h"
 #include <GameFramework//CharacterMovementComponent.h>
 #include "PlayerAnim.h"
+#include "PlayerMove.h"
 
 
 // Sets default values
@@ -78,13 +79,14 @@ ATPSPlayer::ATPSPlayer()
 	{
 		bulletSound = tempSound.Object;
 	}
+
+	playerMove = CreateDefaultSubobject<UPlayerMove>(TEXT("PlayerMove"));
 }
 
 // Called when the game starts or when spawned
 void ATPSPlayer::BeginPlay()
 {
-	Super::BeginPlay();
-	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+	Super::BeginPlay();	
 	APlayerController* pc = Cast<APlayerController>(Controller);
 	if (pc)
 	{
@@ -105,8 +107,7 @@ void ATPSPlayer::BeginPlay()
 // Called every frame
 void ATPSPlayer::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-	PlayerMove();
+	Super::Tick(DeltaTime);	
 }
 
 // Called to bind functionality to input
@@ -118,50 +119,13 @@ void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	if (PlayerInput)
 	{
-		PlayerInput->BindAction(ia_Turn, ETriggerEvent::Triggered, this, &ATPSPlayer::Turn);
-		PlayerInput->BindAction(ia_LookUp, ETriggerEvent::Triggered, this, &ATPSPlayer::LookUp);
-		PlayerInput->BindAction(ia_Move, ETriggerEvent::Triggered, this, &ATPSPlayer::Move);
-		PlayerInput->BindAction(ia_Jump, ETriggerEvent::Started, this, &ATPSPlayer::InputJump);
-		PlayerInput->BindAction(ia_Run, ETriggerEvent::Started, this, &ATPSPlayer::InputRun);
-		PlayerInput->BindAction(ia_Run, ETriggerEvent::Completed, this, &ATPSPlayer::InputRun);
+		playerMove->SetupInputBinding(PlayerInput);				
 		PlayerInput->BindAction(ia_Fire, ETriggerEvent::Started, this, &ATPSPlayer::InputFire);
 		PlayerInput->BindAction(ia_GrenadeGun, ETriggerEvent::Started, this, &ATPSPlayer::ChangeToGrenadeGun);
 		PlayerInput->BindAction(ia_SniperGun, ETriggerEvent::Started, this, &ATPSPlayer::ChangeToSniperGun);
 		PlayerInput->BindAction(ia_Sniper, ETriggerEvent::Started, this, &ATPSPlayer::SniperAim);
 		PlayerInput->BindAction(ia_Sniper, ETriggerEvent::Completed, this, &ATPSPlayer::SniperAim);
-		
 	}
-}
-
-void ATPSPlayer::PlayerMove()
-{
-	direction = (FTransform(GetControlRotation()).TransformVector(direction)).GetSafeNormal();
-	AddMovementInput(direction);
-	direction = FVector::ZeroVector;
-}
-
-void ATPSPlayer::Turn(const struct FInputActionValue& inputValue)
-{
-	float value = inputValue.Get<float>();
-	AddControllerYawInput(value);	
-}
-
-void ATPSPlayer::LookUp(const struct FInputActionValue& inputValue)
-{
-	float value = inputValue.Get<float>();
-	AddControllerPitchInput(value);
-}
-
-void ATPSPlayer::Move(const struct FInputActionValue& inputValue)
-{
-	FVector2D value = inputValue.Get<FVector2D>();
-	direction.X = value.X;
-	direction.Y = value.Y;
-}
-
-void ATPSPlayer::InputJump(const struct FInputActionValue& inputValue)
-{
-	Jump();
 }
 
 void ATPSPlayer::InputFire(const struct FInputActionValue& inputValue)
@@ -222,18 +186,7 @@ void ATPSPlayer::ChangeToSniperGun(const struct FInputActionValue& inputValue)
 	gunMeshComp->SetVisibility(false);
 }
 
-void ATPSPlayer::InputRun(const struct FInputActionValue& inputValue)
-{
-	UCharacterMovementComponent* movement = GetCharacterMovement();
-	if (movement->MaxWalkSpeed > walkSpeed)
-	{
-		movement->MaxWalkSpeed = walkSpeed;
-	}
-	else
-	{
-		movement->MaxWalkSpeed = runSpeed;
-	}
-}
+
 
 void ATPSPlayer::SniperAim(const struct FInputActionValue& inputValue)
 {
