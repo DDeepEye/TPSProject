@@ -32,63 +32,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* tpsCamComp;
 
-	UPROPERTY(EditDefaultsOnly, Category="Input")
-	class UInputMappingContext* imc_TPS;
-
-	
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputAction* ia_Fire;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputAction* ia_GrenadeGun;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputAction* ia_SniperGun;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputAction* ia_Sniper;	
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;	
-	void ChangeToGrenadeGun(const struct FInputActionValue& inputValue);
-	void ChangeToSniperGun(const struct FInputActionValue& inputValue);
-	void InputFire(const struct FInputActionValue& inputValue);	
-	void SniperAim(const struct FInputActionValue& inputValue);
-
 	UPROPERTY(VisibleAnywhere, Category = GunMesh)
 	class USkeletalMeshComponent* gunMeshComp;
 
 	UPROPERTY(VisibleAnywhere, Category = GunMesh)
 	class UStaticMeshComponent* sniperGunComp;
 
-	UPROPERTY(EditDefaultsOnly, Category = BulletFactory)
-	TSubclassOf<class ABullet> bulletFactory;
-
-	bool bUsingGrenadeGun = true;
-	bool bSniperArm = false;
-
-	UPROPERTY(EditDefaultsOnly, Category=SniperUI)
-	TSubclassOf<class UUserWidget> sniperUIFactory;
-	UPROPERTY()
-	class UUserWidget* _sniperUI;
-
-	UPROPERTY(EditDefaultsOnly, Category = SniperUI)
-	TSubclassOf<class UUserWidget> crosshairUIFactory;
-	UPROPERTY()
-	class UUserWidget* _crosshairUI;
-
-	UPROPERTY(EditDefaultsOnly, Category = BulletEffect)
-	class UParticleSystem* bulletEffectFactory;
-
-	UPROPERTY(EditDefaultsOnly, Category = CameraMotion)
-	TSubclassOf<class UCameraShakeBase> cameraShake;
-
-	UPROPERTY(EditDefaultsOnly, Category = CameraMotion)
-	class USoundBase* bulletSound;
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	class UInputMappingContext* imc_TPS;	
+	
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;	
 
 public:
 	UPROPERTY(VisibleAnywhere, Category=Component)
 	class UPlayerBaseComponent* playerMove;
 
+	UPROPERTY(VisibleAnywhere, Category=Component)
+	class UPlayerBaseComponent* playerFire;
 };

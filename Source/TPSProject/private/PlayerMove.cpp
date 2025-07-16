@@ -11,7 +11,7 @@ UPlayerMove::UPlayerMove()
 
 void UPlayerMove::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();	
 	moveComp->MaxWalkSpeed = walkSpeed;
 }
 
