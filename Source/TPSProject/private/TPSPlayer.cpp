@@ -15,6 +15,7 @@
 #include "PlayerAnim.h"
 #include "PlayerMove.h"
 #include "PlayerFire.h"
+#include "TPSProject.h"
 
 
 // Sets default values
@@ -78,7 +79,8 @@ void ATPSPlayer::BeginPlay()
 		{
 			subsystem->AddMappingContext(imc_TPS, 0);
 		}
-	}	
+	}
+	hp = initialHp;
 }
 
 // Called every frame
@@ -98,5 +100,21 @@ void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	{
 		onInputBindingDelegate.Broadcast(PlayerInput);
 	}
+}
+
+void ATPSPlayer::OnHitEvent()
+{
+	PRINT_LOG(TEXT("Damaged !!!!!"));
+	--hp;
+	if (hp <= 0)
+	{
+		PRINT_LOG( TEXT("Player is dead!"));
+		OnGameOver();
+	}
+}
+
+void ATPSPlayer::OnGameOver_Implementation()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
 

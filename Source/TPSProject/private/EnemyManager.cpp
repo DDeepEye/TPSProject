@@ -29,12 +29,10 @@ void AEnemyManager::Tick(float DeltaTime)
 
 void AEnemyManager::CreateEnemy()
 {
-	/*
 	int index = FMath::RandRange(0, spawnPoints.Num() - 1);
 	GetWorld()->SpawnActor<AEnemy>(enemyFactory, spawnPoints[index]->GetActorLocation(), FRotator(0));
 
 	float createTime = FMath::RandRange(minTime, maxTime);
 	GetWorld()->GetTimerManager().SetTimer(spawnTimerHandle, this, &AEnemyManager::CreateEnemy, createTime);
-	*/
 }
 

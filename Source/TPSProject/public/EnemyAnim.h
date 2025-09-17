@@ -29,5 +29,5 @@ public:
 	void PlayDamageAnim(FName sectionName);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=FSM)
-	bool bDieDone = false;
+	bool bDieDone = false;	
 };
