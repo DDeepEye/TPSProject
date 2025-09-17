@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TPSPlayer.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FInputBindingDelegate, class UEnhancedInputComponent*);
+
 UCLASS()
 class TPSPROJECT_API ATPSPlayer : public ACharacter
 {
@@ -45,9 +47,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;	
 
 public:
-	UPROPERTY(VisibleAnywhere, Category=Component)
-	class UPlayerBaseComponent* playerMove;
+	FInputBindingDelegate onInputBindingDelegate;
 
 	UPROPERTY(VisibleAnywhere, Category=Component)
-	class UPlayerBaseComponent* playerFire;
+	class UPlayerBaseComponent* playerMove;
 };

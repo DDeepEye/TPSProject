@@ -64,7 +64,6 @@ ATPSPlayer::ATPSPlayer()
 	bUseControllerRotationYaw = true;
 
 	playerMove = CreateDefaultSubobject<UPlayerMove>(TEXT("PlayerMove"));
-	playerFire = CreateDefaultSubobject<UPlayerFire>(TEXT("PlayerFire"));
 }
 
 // Called when the game starts or when spawned
@@ -97,8 +96,7 @@ void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	if (PlayerInput)
 	{
-		playerMove->SetupInputBinding(PlayerInput);
-		playerFire->SetupInputBinding(PlayerInput);		
+		onInputBindingDelegate.Broadcast(PlayerInput);
 	}
 }
 
