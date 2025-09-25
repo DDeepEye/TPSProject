@@ -30,7 +30,8 @@ UPlayerFire::UPlayerFire()
 		crosshairUIFactory = TempCrosshairWidget.Class;
 	}	
 
-	ConstructorHelpers::FObjectFinder<USoundBase> tempSound(TEXT("/Script/Engine.SoundWave'/Game/SniperGun/Rifle.Rifle''"));
+	ConstructorHelpers::FObjectFinder<USoundBase> tempSound(TEXT("/Script/Engine.SoundWave'/Game/SniperGun/Rifle.Rifle'"));		
+
 	if (tempSound.Succeeded())
 	{
 		bulletSound = tempSound.Object;
