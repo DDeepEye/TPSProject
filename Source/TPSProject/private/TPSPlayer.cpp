@@ -117,4 +117,3 @@ void ATPSPlayer::OnGameOver_Implementation()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
-
