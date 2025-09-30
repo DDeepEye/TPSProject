@@ -67,4 +67,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category=Health)
 	void OnUsingGrenade(bool isGrenade);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category=Health)
+	void UIctrlHP();
 };
